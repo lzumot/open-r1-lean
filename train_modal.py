@@ -59,7 +59,7 @@ def train():
     cmd = (
     f"{activate_cmd} ACCELERATE_LOG_LEVEL=info accelerate launch "
     f"--config_file recipes/accelerate_configs/zero2.yaml "
-    f"--num_processes={GPU_COUNT} src/open_r1/grpo.py "
+    f"--num_processes={GPU_COUNT - 1} src/open_r1/grpo.py "
     f"--config past_runs/run_3_algebra/myconfig.yaml "
     f"--output_dir {CHECKPOINT_DIR}/{EXPERIMENT_NAME}"
     )
