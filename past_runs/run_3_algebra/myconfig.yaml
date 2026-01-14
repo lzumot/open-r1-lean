@@ -39,8 +39,8 @@ max_steps: 5 #-1
 num_generations: 16
 num_train_epochs: 1 # 10
 overwrite_output_dir: true
-per_device_eval_batch_size: 2 #16
-per_device_train_batch_size: 2 #16
+per_device_eval_batch_size: 16
+per_device_train_batch_size: 16
 push_to_hub: false
 report_to: wandb
 wandb_entity: laithzumot          # Your wandb username
