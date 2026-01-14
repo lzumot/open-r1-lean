@@ -1,5 +1,6 @@
 from modal import App, Image, Volume, Secret, gpu
 import datetime
+import modal
 
 EXPERIMENT_NAME = f"Lean-GRPO-V2-7B-Algebra-{datetime.datetime.now().strftime('%Y%m%d-%H%M')}"
 
@@ -12,13 +13,12 @@ CHECKPOINT_DIR = f"{WORK_DIR}/checkpoints"
 app = App("openr1-lean-training")
 volume = Volume.from_name("openr1-checkpoints", create_if_missing=True)
 
+# ✅ Use NVIDIA PyTorch image (has python symlink + CUDA pre-configured)
 image = (
-    Image.from_registry("nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04")
-    .apt_install("git", "curl", "python3.10", "python3-pip")
+    Image.from_registry("nvcr.io/nvidia/pytorch:24.01-py3")
+    .apt_install("git", "curl")
     .run_commands(
-        "curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10",
-        "ln -sf /usr/bin/python3.10 /usr/bin/python",
-        "curl -LsSf https://astral.sh/uv/install.sh | sh", 
+        "curl -LsSf https://astral.sh/uv/install.sh | sh",
         "pip install modal",
     )
     .dockerfile_commands([f"COPY . {WORK_DIR}"])
@@ -26,6 +26,7 @@ image = (
     .run_commands(
         "uv venv openr1 --python 3.11",
         ". openr1/bin/activate && uv pip install --upgrade pip",
+        "git config --global url.https://github.com/.insteadOf git@github.com:",  # HTTPS fix
         ". openr1/bin/activate && uv pip install vllm==0.7.2",
         ". openr1/bin/activate && uv pip install setuptools",
         ". openr1/bin/activate && uv pip install flash-attn --no-build-isolation",
@@ -33,15 +34,16 @@ image = (
     )
 )
 
+
 @app.function(
     image=image,
-    gpu=gpu.H100(count=GPU_COUNT),
+    gpu=f"H100:{GPU_COUNT}",
     volumes={CHECKPOINT_DIR: volume},
     secrets=[Secret.from_name("wandb-secret")],
     timeout=86400,  # 24 hours
     cpu=8,
     memory=32768,  # 32GB RAM
-    spot=True,  # Enable spot instances
+    #spot=True,  # Enable spot instances
 )
 def train():
     import os
