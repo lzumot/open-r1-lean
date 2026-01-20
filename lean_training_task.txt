@@ -4616,4 +4616,12 @@ error: external command 'git' exited with code 128
 │ │ theorem                        │                                │        │ │
 │ │ IsUnit.squarefree_pow_succ_alt │                                │        │ │
 │ │ [CommMonoid R] {x : R} {n : ℕ} │                                │        │ │
-│ │ (h : IsUnit x) : Squarefree (x │     
+│ │ (h : IsUnit x) : Squarefree (x │     Stopping app - user stopped from dashboard.
+W0120 13:42:21.553000 103 torch/distributed/elastic/agent/server/api.py:704] Received 2 death signal, shutting down workers
+W0120 13:42:21.555000 103 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 161 closing signal SIGINT
+W0120 13:42:21.555000 103 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 162 closing signal SIGINT
+W0120 13:42:21.556000 103 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 163 closing signal SIGINT
+W0120 13:42:21.556000 103 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 164 closing signal SIGINT
+W0120 13:42:21.557000 103 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 165 closing signal SIGINT
+W0120 13:42:21.557000 103 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 166 closing signal SIGINT
+W0120 13:42:21.558000 103 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 167 closing signal SIGINT
