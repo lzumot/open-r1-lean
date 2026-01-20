@@ -19,8 +19,8 @@ def split_jsonl(input_path: str, train_ratio: float = 0.9, seed: int = 42):
     train_file = input_file.parent / f"{base_name}{suffix}_train.jsonl"
     eval_file = input_file.parent / f"{base_name}{suffix}_eval.jsonl"
     
-    train_file.write_file(''.join(lines[:split_idx]))
-    eval_file.write_file(''.join(lines[split_idx:]))
+    train_file.write_text(''.join(lines[:split_idx]))
+    eval_file.write_text(''.join(lines[split_idx:]))
     
     print(f"✅ Split {len(lines)} lines: {train_file.name}, {eval_file.name}")
 

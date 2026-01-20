@@ -8,7 +8,7 @@ attn_implementation: flash_attention_2
 # We edit the DeepSeek chat template to ensure (a) the reasoning block within <think> and </think> is included in the completion and (b) the <think> tag is not part of the prefill so that the format reward works
 # chat_template: "{% for message in messages %}{% if message['role'] == 'user' %}{{ message['content'] }}{% endif %}{% endfor %}"
 chat_template: "{% for message in messages %}{% if message['role'] == 'system' %}{{ message['content'] }}\n\n{% endif %}{% if message['role'] == 'user' %}{{ message['content'] }}{% endif %}{% endfor %}"
-dataset_name: ./data/grpo_problem_algebra.jsonl ## ここをleanのconjecturesが入っているhuggingfaceのurlに変更．カラムは`problem`という名前にする．
+dataset_name: ./data/grpo_problem_algebra_3762.jsonl ## ここをleanのconjecturesが入っているhuggingfaceのurlに変更．カラムは`problem`という名前にする．
 system_prompt: "Complete the following Lean 4 code:\n\n```lean4\n"
 
 # GRPO trainer config
