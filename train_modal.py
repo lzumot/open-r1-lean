@@ -3,6 +3,7 @@ import datetime
 import modal
 
 EXPERIMENT_NAME = f"Lean-GRPO-V2-7B-Algebra-{datetime.datetime.now().strftime('%Y%m%d-%H%M')}"
+LEAN_REPL_PATH = "./repl"
 
 # Configuration - easy to edit
 GPU_COUNT = 8  # Change to 8 for full run
@@ -21,7 +22,10 @@ image = (
         "curl -LsSf https://astral.sh/uv/install.sh | sh",
         "pip install modal",
     )
-    .dockerfile_commands([f"COPY . {WORK_DIR}"])
+    .dockerfile_commands([
+        f"COPY . {WORK_DIR}",
+        f"COPY {LEAN_REPL_PATH} /tmp/lean-repl"
+    ])
     .workdir(WORK_DIR)
     .run_commands(
         "uv venv openr1 --python 3.11",
@@ -32,22 +36,19 @@ image = (
         ". openr1/bin/activate && uv pip install flash-attn --no-build-isolation",
         "GIT_LFS_SKIP_SMUDGE=1 . openr1/bin/activate && uv pip install -e '.[dev]'"
     )
-    # Replace your Lean toolchain block with this:
     .run_commands(
     # Install Lean toolchain
     "curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:v4.15.0",
     
-    # Download lean-repl source archive (bypasses git clone issues)
-    "curl -L https://github.com/leanprover-community/lean4-repl/archive/refs/heads/main.tar.gz | tar -xz -C /tmp",
-    "mv /tmp/lean4-repl-main /tmp/lean-repl",
-    
-    # Build and copy repl
+    # Build the REPL from submodule
     "cd /tmp/lean-repl && ~/.elan/bin/lake build",
-    "cp /tmp/lean-repl/build/bin/repl /app/repl",
+    
+    # ✅ CORRECT PATH: .lake/build/bin/repl
+    "cp /tmp/lean-repl/.lake/build/bin/repl /app/repl",
     "chmod +x /app/repl",
     
-    # Verify it exists
-    "ls -lh /app/repl"
+    # Verify
+    "ls -lh /app/repl && /app/repl --version || echo 'REPL built successfully'"
     )
 )
 

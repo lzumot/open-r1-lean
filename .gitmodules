@@ -1,3 +1,4 @@
 [submodule "repl"]
 	path = repl
-	url = git@github.com:ondanaoto/repl.git
+	# url = git@github.com:ondanaoto/repl.git
+	url = https://github.com/ondanaoto/repl.git
