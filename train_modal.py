@@ -55,7 +55,8 @@ image = (
 
 @app.function(
     image=image,
-    gpu=f"H100:{GPU_COUNT}",
+    #gpu=f"H100:{GPU_COUNT}",
+    gpu=gpu.H100(count=GPU_COUNT),
     volumes={CHECKPOINT_DIR: volume},
     secrets=[Secret.from_name("wandb-secret")],
     timeout=86400,  # 24 hours
