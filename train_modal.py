@@ -16,7 +16,7 @@ volume = Volume.from_name("openr1-checkpoints", create_if_missing=True)
 # ✅ Use NVIDIA PyTorch image (has python symlink + CUDA pre-configured)
 image = (
     Image.from_registry("nvcr.io/nvidia/pytorch:24.01-py3")
-    .apt_install("git", "curl")
+    .apt_install("git", "curl", "clang", "make") 
     .run_commands(
         "curl -LsSf https://astral.sh/uv/install.sh | sh",
         "pip install modal",
@@ -31,6 +31,17 @@ image = (
         ". openr1/bin/activate && uv pip install setuptools",
         ". openr1/bin/activate && uv pip install flash-attn --no-build-isolation",
         "GIT_LFS_SKIP_SMUDGE=1 . openr1/bin/activate && uv pip install -e '.[dev]'"
+    )
+    .run_commands(
+        # Install Lean toolchain
+        "curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:v4.15.0",
+        # Clone and build lean-repl
+        "git clone https://github.com/leanprover-community/lean4-repl.git /tmp/lean-repl",
+        "cd /tmp/lean-repl && ~/.elan/bin/lake build",
+        # Copy repl to where your script expects it
+        "cp /tmp/lean-repl/build/bin/repl /app/repl",
+        # Verify it works
+        "/app/repl --version"
     )
 )
 
