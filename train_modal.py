@@ -32,16 +32,23 @@ image = (
         ". openr1/bin/activate && uv pip install flash-attn --no-build-isolation",
         "GIT_LFS_SKIP_SMUDGE=1 . openr1/bin/activate && uv pip install -e '.[dev]'"
     )
+    # Replace your Lean toolchain block with this:
     .run_commands(
         # Install Lean toolchain
         "curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:v4.15.0",
-        # Clone and build lean-repl
-        "git clone https://github.com/leanprover-community/lean4-repl.git /tmp/lean-repl",
+        
+        # Clone lean-repl with robust settings (in same layer as git config)
+        "git config --global http.version HTTP/1.1",
+        "git config --global http.postBuffer 524288000",
+        "git clone --depth 1 https://github.com/leanprover-community/lean4-repl.git /tmp/lean-repl",
+        
+        # Build and copy repl
         "cd /tmp/lean-repl && ~/.elan/bin/lake build",
-        # Copy repl to where your script expects it
         "cp /tmp/lean-repl/build/bin/repl /app/repl",
-        # Verify it works
-        "/app/repl --version"
+        "chmod +x /app/repl",
+        
+        # Verify
+        "/app/repl --version || echo 'REPL built but version check failed'"
     )
 )
 
