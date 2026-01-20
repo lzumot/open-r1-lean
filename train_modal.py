@@ -6,7 +6,7 @@ EXPERIMENT_NAME = f"Lean-GRPO-V2-7B-Algebra-{datetime.datetime.now().strftime('%
 LEAN_REPL_PATH = "./repl"
 
 # Configuration - easy to edit
-GPU_COUNT = 5  # Change to 8 for full run
+GPU_COUNT = 8  # Change to 8 for full run
 WORK_DIR = "/app"
 CHECKPOINT_DIR = f"{WORK_DIR}/checkpoints"
 
@@ -77,7 +77,7 @@ def train():
     # Run training  
     cmd = (
     f"{activate_cmd} ACCELERATE_LOG_LEVEL=info accelerate launch "
-    f"--config_file past_runs/orig/zero2.yaml "
+    f"--config_file past_runs/run_3_algebra/zero2.yaml "
     f"--num_processes={GPU_COUNT - 1} src/open_r1/grpo.py "
     f"--config past_runs/run_3_algebra/myconfig.yaml "
     f"--output_dir {CHECKPOINT_DIR}/{EXPERIMENT_NAME}"
