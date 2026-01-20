@@ -34,21 +34,20 @@ image = (
     )
     # Replace your Lean toolchain block with this:
     .run_commands(
-        # Install Lean toolchain
-        "curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:v4.15.0",
-        
-        # Clone lean-repl with robust settings (in same layer as git config)
-        "git config --global http.version HTTP/1.1",
-        "git config --global http.postBuffer 524288000",
-        "git clone --depth 1 https://github.com/leanprover-community/lean4-repl.git /tmp/lean-repl",
-        
-        # Build and copy repl
-        "cd /tmp/lean-repl && ~/.elan/bin/lake build",
-        "cp /tmp/lean-repl/build/bin/repl /app/repl",
-        "chmod +x /app/repl",
-        
-        # Verify
-        "/app/repl --version || echo 'REPL built but version check failed'"
+    # Install Lean toolchain
+    "curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain leanprover/lean4:v4.15.0",
+    
+    # Download lean-repl source archive (bypasses git clone issues)
+    "curl -L https://github.com/leanprover-community/lean4-repl/archive/refs/heads/main.tar.gz | tar -xz -C /tmp",
+    "mv /tmp/lean4-repl-main /tmp/lean-repl",
+    
+    # Build and copy repl
+    "cd /tmp/lean-repl && ~/.elan/bin/lake build",
+    "cp /tmp/lean-repl/build/bin/repl /app/repl",
+    "chmod +x /app/repl",
+    
+    # Verify it exists
+    "ls -lh /app/repl"
     )
 )
 
