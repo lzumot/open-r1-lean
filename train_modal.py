@@ -60,7 +60,7 @@ image = (
     volumes={CHECKPOINT_DIR: volume},
     secrets=[Secret.from_name("wandb-secret")],
     timeout=86400,  # 24 hours
-    cpu=8,
+    cpu=16,
     memory=32768,  # 32GB RAM
     #spot=True,  # Enable spot instances
 )
