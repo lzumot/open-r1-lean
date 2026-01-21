@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # --- CONFIGURE THESE ---
 ENTITY = "laithzumot"
 PROJECT = "huggingface" 
-RUN_ID = "yqnbvuec"  # Get from wandb UI URL
+RUN_ID = "yqnbvuec"  # ✅ This is from your URL
 # -----------------------
 
 # Initialize API
