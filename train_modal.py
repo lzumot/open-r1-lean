@@ -6,7 +6,7 @@ EXPERIMENT_NAME = f"Lean-GRPO-V2-7B-Algebra-{datetime.datetime.now().strftime('%
 LEAN_REPL_PATH = "./repl"
 
 # Configuration - easy to edit
-GPU_COUNT = 8  # Change to 8 for full run
+GPU_COUNT = 5  # Change to 8 for full run
 WORK_DIR = "/app"
 CHECKPOINT_DIR = f"{WORK_DIR}/checkpoints"
 
